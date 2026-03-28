@@ -43,7 +43,10 @@ function FilterGroup({ group, selectedFilters, onFilterChange }) {
               <label className={styles.checkboxLabel}>
                 <input
                   type="checkbox"
-                  checked={selectedFilters[group.id]?.includes(option) || false}
+                  checked={
+                    selectedFilters[group.id]?.length > 0 &&
+                    (selectedFilters[group.id]?.includes(option) || false)
+                  }
                   onChange={() => onFilterChange(group.id, option)}
                 />
                 {option}

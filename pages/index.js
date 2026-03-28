@@ -80,6 +80,7 @@ export async function getServerSideProps() {
     const categories = await categoriesRes.json();
     return { props: { products, categories } };
   } catch (error) {
+    console.error('Failed to fetch products or categories:', error);
     return { props: { products: [], categories: [] } };
   }
 }

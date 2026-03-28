@@ -11,7 +11,7 @@ export default function Header() {
       </div>
       <div className={styles.mainNav}>
         <div className={styles.logo}>
-          <a href="/" aria-label="METTAMORPHOSE Home">LOGO</a>
+          <a href="/" aria-label="METTAMORPHOSE Home">METTAMORPHOSE</a>
         </div>
         <nav className={`${styles.navLinks} ${menuOpen ? styles.navOpen : ''}`} aria-label="Main Navigation">
           <ul>
