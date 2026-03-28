@@ -1,0 +1,101 @@
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  border-right: 1px solid #e0e0e0;
+  padding: 1rem;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  position: sticky;
+  top: 80px;
+  align-self: flex-start;
+}
+
+.sidebarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.filterTitle {
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px;
+  color: #333;
+}
+
+.filterGroup {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 0.75rem 0;
+}
+
+.groupHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 0;
+  color: #222;
+}
+
+.chevron {
+  display: inline-block;
+  transition: transform 0.2s ease;
+  font-size: 1rem;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.optionsList {
+  margin-top: 0.5rem;
+  padding-left: 0.25rem;
+  list-style: none;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  font-size: 0.875rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.checkboxLabel input[type="checkbox"] {
+  cursor: pointer;
+  accent-color: #222;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: 320px;
+    height: 100vh;
+    max-height: 100vh;
+    z-index: 1000;
+    background: #fff;
+    border-right: 1px solid #e0e0e0;
+    overflow-y: auto;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+  }
+}
