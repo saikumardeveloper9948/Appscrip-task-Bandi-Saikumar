@@ -61,7 +61,7 @@ export default function FilterSidebar({ categories = [], selectedFilters, onFilt
   const categoryGroup = {
     id: 'category',
     label: 'CATEGORY',
-    options: categories.map((c) => c.charAt(0).toUpperCase() + c.slice(1)),
+    options: categories.map((category) => category.charAt(0).toUpperCase() + category.slice(1)),
   };
 
   const filterGroups = categories.length > 0
