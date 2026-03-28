@@ -1,0 +1,141 @@
+.footer {
+  background: #222;
+  color: #fff;
+  padding: 3rem 1.5rem;
+}
+
+.newsletter {
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #444;
+}
+
+.newsletter h3 {
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.newsletter p {
+  font-size: 0.875rem;
+  color: #ccc;
+}
+
+.newsletterForm {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.emailInput {
+  padding: 0.75rem 1rem;
+  flex: 1;
+  min-width: 200px;
+  border: 1px solid #fff;
+  background: transparent;
+  color: #fff;
+  font-size: 0.875rem;
+  outline: none;
+}
+
+.emailInput::placeholder {
+  color: #aaa;
+}
+
+.subscribeBtn {
+  padding: 0.75rem 2rem;
+  background: #fff;
+  color: #000;
+  font-weight: bold;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  border: 1px solid #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.subscribeBtn:hover {
+  background: #e0e0e0;
+}
+
+.footerColumns {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  padding: 2rem 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footerCol h4 {
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.footerCol ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footerCol ul li {
+  margin-bottom: 0.5rem;
+}
+
+.footerCol ul li a {
+  color: #ccc;
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.footerCol ul li a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.footerCol p {
+  color: #ccc;
+  font-size: 0.875rem;
+}
+
+.paymentTitle {
+  margin-top: 1.5rem !important;
+}
+
+.paymentIcons {
+  color: #ccc;
+  font-size: 0.875rem;
+}
+
+.footerBottom {
+  text-align: center;
+  border-top: 1px solid #444;
+  padding-top: 1rem;
+  font-size: 0.75rem;
+  color: #999;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .footerColumns {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer {
+    padding: 2rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footerColumns {
+    grid-template-columns: 1fr;
+  }
+}

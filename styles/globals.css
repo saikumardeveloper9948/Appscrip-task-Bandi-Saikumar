@@ -1,0 +1,54 @@
+:root {
+  --primary-color: #222222;
+  --secondary-color: #555555;
+  --accent-color: #000000;
+  --background-color: #ffffff;
+  --border-color: #e0e0e0;
+  --light-gray: #f5f5f5;
+  --text-color: #333333;
+  --link-color: #000000;
+  --font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  color: var(--text-color);
+  background-color: var(--background-color);
+  line-height: 1.5;
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: var(--font-family);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+ul {
+  list-style: none;
+}
