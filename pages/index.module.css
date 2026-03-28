@@ -47,6 +47,16 @@
   padding: 0 1.5rem 3rem;
 }
 
+.errorMsg {
+  color: #c0392b;
+  background: #fdecea;
+  border: 1px solid #e74c3c;
+  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
 @media (max-width: 768px) {
   .heroTitle {
     font-size: 1.5rem;

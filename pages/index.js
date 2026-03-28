@@ -4,7 +4,7 @@ import Footer from '../components/Footer/Footer';
 import ProductGrid from '../components/ProductGrid/ProductGrid';
 import styles from './index.module.css';
 
-export default function HomePage({ products, categories }) {
+export default function HomePage({ products, categories, error }) {
   const schemaData = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -62,7 +62,12 @@ export default function HomePage({ products, categories }) {
           <p className={styles.heroSubtitle}>Explore our wide range of carefully curated products</p>
         </section>
         <div className={styles.contentArea}>
-          <ProductGrid products={products} />
+          {error && (
+            <p className={styles.errorMsg} role="alert">
+              Failed to load products. Please try refreshing the page.
+            </p>
+          )}
+          <ProductGrid products={products} categories={categories} />
         </div>
       </main>
       <Footer />
@@ -81,6 +86,6 @@ export async function getServerSideProps() {
     return { props: { products, categories } };
   } catch (error) {
     console.error('Failed to fetch products or categories:', error);
-    return { props: { products: [], categories: [] } };
+    return { props: { products: [], categories: [], error: true } };
   }
 }

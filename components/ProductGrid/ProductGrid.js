@@ -11,32 +11,68 @@ const SORT_OPTIONS = [
   { value: 'price-low', label: 'PRICE: LOW TO HIGH' },
 ];
 
-export default function ProductGrid({ products }) {
+export default function ProductGrid({ products, categories }) {
   const [sortBy, setSortBy] = useState('recommended');
   const [showFilter, setShowFilter] = useState(true);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState({});
 
-  const sortedProducts = useMemo(() => {
-    const arr = [...products];
+  function handleFilterChange(groupId, option) {
+    setSelectedFilters((prev) => {
+      if (option === null) {
+        return { ...prev, [groupId]: [] };
+      }
+      const current = prev[groupId] || [];
+      const updated = current.includes(option)
+        ? current.filter((o) => o !== option)
+        : [...current, option];
+      return { ...prev, [groupId]: updated };
+    });
+  }
+
+  const filteredAndSortedProducts = useMemo(() => {
+    let result = products.filter((product) => {
+      const categoryFilter = selectedFilters.category || [];
+      if (categoryFilter.length > 0) {
+        const normalised = product.category.toLowerCase();
+        const match = categoryFilter.some((f) => normalised.includes(f.toLowerCase()));
+        if (!match) return false;
+      }
+      return true;
+    });
+
     switch (sortBy) {
       case 'price-high':
-        return arr.sort((a, b) => b.price - a.price);
+        result = [...result].sort((a, b) => b.price - a.price);
+        break;
       case 'price-low':
-        return arr.sort((a, b) => a.price - b.price);
+        result = [...result].sort((a, b) => a.price - b.price);
+        break;
       case 'popular':
-        return arr.sort((a, b) => (b.rating?.count || 0) - (a.rating?.count || 0));
+        result = [...result].sort((a, b) => (b.rating?.count || 0) - (a.rating?.count || 0));
+        break;
       case 'newest':
-        return arr.sort((a, b) => b.id - a.id);
+        result = [...result].sort((a, b) => b.id - a.id);
+        break;
       default:
-        return arr;
+        break;
     }
-  }, [products, sortBy]);
+
+    return result;
+  }, [products, sortBy, selectedFilters]);
+
+  const sidebarProps = {
+    categories,
+    selectedFilters,
+    onFilterChange: handleFilterChange,
+    isVisible: true,
+  };
 
   return (
     <div className={styles.productGridWrapper}>
       <div className={styles.toolbar}>
         <div className={styles.toolbarLeft}>
-          <span className={styles.itemCount}>{products.length} ITEMS</span>
+          <span className={styles.itemCount}>{filteredAndSortedProducts.length} ITEMS</span>
           <button
             className={styles.filterToggle}
             onClick={() => setShowFilter(!showFilter)}
@@ -69,16 +105,16 @@ export default function ProductGrid({ products }) {
       <div className={styles.contentRow}>
         {showFilter && (
           <div className={styles.desktopFilter}>
-            <FilterSidebar isVisible={true} />
+            <FilterSidebar {...sidebarProps} />
           </div>
         )}
         {mobileFilterOpen && (
           <div className={styles.mobileFilterOverlay}>
-            <FilterSidebar isVisible={true} onClose={() => setMobileFilterOpen(false)} />
+            <FilterSidebar {...sidebarProps} onClose={() => setMobileFilterOpen(false)} />
           </div>
         )}
         <div className={`${styles.grid} ${!showFilter ? styles.gridFull : ''}`}>
-          {sortedProducts.map((product) => (
+          {filteredAndSortedProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>

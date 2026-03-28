@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import styles from './FilterSidebar.module.css';
 
-const FILTER_GROUPS = [
-  { id: 'idealFor', label: 'IDEAL FOR', options: ['Men', 'Women', 'Baby & Kids'] },
+const STATIC_FILTER_GROUPS = [
   { id: 'occasion', label: 'OCCASION', options: ['Casual', 'Formal', 'Party', 'Sports'] },
   { id: 'work', label: 'WORK', options: ['Office', 'Outdoor', 'Travel'] },
   { id: 'fabric', label: 'FABRIC', options: ['Cotton', 'Polyester', 'Silk', 'Wool', 'Linen'] },
@@ -14,6 +13,8 @@ const FILTER_GROUPS = [
 
 function FilterGroup({ group, selectedFilters, onFilterChange }) {
   const [open, setOpen] = useState(false);
+  const activeOptions = selectedFilters[group.id] || [];
+  const allSelected = activeOptions.length === 0;
 
   return (
     <div className={styles.filterGroup}>
@@ -32,7 +33,7 @@ function FilterGroup({ group, selectedFilters, onFilterChange }) {
             <label className={styles.checkboxLabel}>
               <input
                 type="checkbox"
-                checked={!selectedFilters[group.id] || selectedFilters[group.id].length === 0}
+                checked={allSelected}
                 onChange={() => onFilterChange(group.id, null)}
               />
               All
@@ -43,10 +44,7 @@ function FilterGroup({ group, selectedFilters, onFilterChange }) {
               <label className={styles.checkboxLabel}>
                 <input
                   type="checkbox"
-                  checked={
-                    selectedFilters[group.id]?.length > 0 &&
-                    (selectedFilters[group.id]?.includes(option) || false)
-                  }
+                  checked={activeOptions.includes(option)}
                   onChange={() => onFilterChange(group.id, option)}
                 />
                 {option}
@@ -59,21 +57,16 @@ function FilterGroup({ group, selectedFilters, onFilterChange }) {
   );
 }
 
-export default function FilterSidebar({ isVisible = true, onClose }) {
-  const [selectedFilters, setSelectedFilters] = useState({});
+export default function FilterSidebar({ categories = [], selectedFilters, onFilterChange, isVisible = true, onClose }) {
+  const categoryGroup = {
+    id: 'category',
+    label: 'CATEGORY',
+    options: categories.map((c) => c.charAt(0).toUpperCase() + c.slice(1)),
+  };
 
-  function handleFilterChange(groupId, option) {
-    setSelectedFilters((prev) => {
-      if (option === null) {
-        return { ...prev, [groupId]: [] };
-      }
-      const current = prev[groupId] || [];
-      const updated = current.includes(option)
-        ? current.filter((o) => o !== option)
-        : [...current, option];
-      return { ...prev, [groupId]: updated };
-    });
-  }
+  const filterGroups = categories.length > 0
+    ? [categoryGroup, ...STATIC_FILTER_GROUPS]
+    : STATIC_FILTER_GROUPS;
 
   if (!isVisible) return null;
 
@@ -85,12 +78,12 @@ export default function FilterSidebar({ isVisible = true, onClose }) {
           <button className={styles.closeBtn} onClick={onClose} aria-label="Close filters">&#10005;</button>
         )}
       </div>
-      {FILTER_GROUPS.map((group) => (
+      {filterGroups.map((group) => (
         <FilterGroup
           key={group.id}
           group={group}
           selectedFilters={selectedFilters}
-          onFilterChange={handleFilterChange}
+          onFilterChange={onFilterChange}
         />
       ))}
     </aside>
