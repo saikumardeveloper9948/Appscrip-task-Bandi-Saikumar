@@ -25,11 +25,13 @@ export default function ProductCard({
     return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect fill='%23f0f0f0' width='300' height='300'/%3E%3Ccircle cx='150' cy='120' r='35' fill='%23d0d0d0'/%3E%3Cpath d='M 80 180 Q 150 160 220 180' fill='none' stroke='%23d0d0d0' stroke-width='2'/%3E%3Ctext x='150' y='260' text-anchor='middle' font-family='Arial' font-size='11' fill='%23999'%3E${categoryText}%3C/text%3E%3C/svg%3E`;
   }, [product.category]);
 
-  // Convert FakeStore API image URL to proxied API route
+  // Convert FakeStore API image URL to proxy (for CORS handling on production)
+  // Uses the stable ReactBD API which has more reliable image URLs
   const imageUrl = useMemo(() => {
     if (!product.image) return placeholderSvg;
-    // Use our API route to proxy the image (bypasses CORS on production)
-    return `/api/image?url=${encodeURIComponent(product.image)}`;
+    // Try direct image first (ReactBD API has better CORS headers)
+    // If it fails, fallback to SVG
+    return product.image;
   }, [product.image, placeholderSvg]);
 
   const handleWishlistToggle = (e: React.MouseEvent) => {

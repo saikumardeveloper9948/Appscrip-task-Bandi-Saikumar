@@ -1,19 +1,31 @@
 import { Product } from "@/types/product";
 
-const API_BASE_URL = "https://fakestoreapi.com";
+// Using ReactBD Mirror of FakeStore API (more stable than fakestoreapi.com)
+// Alternative: https://api.escuelajs.co/api/v1 (Platzi API)
+const API_BASE_URL = "https://fakestoreapi.reactbd.com";
 
 export async function fetchProducts(): Promise<Product[]> {
-  const res = await fetch(`${API_BASE_URL}/products`);
-  if (!res.ok) {
-    throw new Error("Failed to fetch products");
+  try {
+    const res = await fetch(`${API_BASE_URL}/products`);
+    if (!res.ok) {
+      throw new Error("Failed to fetch products");
+    }
+    return res.json();
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return [];
   }
-  return res.json();
 }
 
 export async function fetchCategories(): Promise<string[]> {
-  const res = await fetch(`${API_BASE_URL}/products/categories`);
-  if (!res.ok) {
-    throw new Error("Failed to fetch categories");
+  try {
+    const res = await fetch(`${API_BASE_URL}/products/categories`);
+    if (!res.ok) {
+      throw new Error("Failed to fetch categories");
+    }
+    return res.json();
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return [];
   }
-  return res.json();
 }
