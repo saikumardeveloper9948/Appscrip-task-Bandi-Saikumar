@@ -59,6 +59,7 @@ export default function ProductCard({
   return (
     <article className="product-card" onClick={handleProductClick}>
       <div className="product-image-wrapper">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={product.image}
           alt={`${product.title} - ${product.category} product image`}
