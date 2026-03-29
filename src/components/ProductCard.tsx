@@ -68,6 +68,8 @@ export default function ProductCard({
           className="product-image"
           title={product.title}
           loading="lazy"
+          unoptimized
+          priority={false}
         />
 
         {/* Overlay Actions */}
