@@ -8,6 +8,9 @@ import FilterSidebar from "./FilterSidebar";
 interface ProductListingProps {
   products: Product[];
   categories: string[];
+  onAddToCart?: (productTitle: string) => void;
+  onAddToWishlist?: () => void;
+  onRemoveFromWishlist?: () => void;
 }
 
 const SORT_OPTIONS = [
@@ -18,18 +21,51 @@ const SORT_OPTIONS = [
   { value: "price-desc", label: "PRICE: HIGH TO LOW" },
 ];
 
-export default function ProductListing({ products, categories }: ProductListingProps) {
+export default function ProductListing({
+  products,
+  categories,
+  onAddToCart,
+  onAddToWishlist,
+  onRemoveFromWishlist,
+}: ProductListingProps) {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortBy, setSortBy] = useState("recommended");
   const [showFilter, setShowFilter] = useState(true);
+  const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
+  
+  // Price filter
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
+  
+  // Rating filter
+  const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
+  
+  // Other filters
+  const [idealForFilter, setIdealForFilter] = useState<string[]>([]);
+  const [occasionFilter, setOccasionFilter] = useState<string[]>([]);
+  const [workFilter, setWorkFilter] = useState<string[]>([]);
+  const [fabricFilter, setFabricFilter] = useState<string[]>([]);
+  const [segmentFilter, setSegmentFilter] = useState<string[]>([]);
+  const [suitableForFilter, setSuitableForFilter] = useState<string[]>([]);
+  const [rawMaterialsFilter, setRawMaterialsFilter] = useState<string[]>([]);
+  const [patternFilter, setPatternFilter] = useState<string[]>([]);
 
   const filteredAndSortedProducts = useMemo(() => {
     let result = [...products];
 
+    // Category filter
     if (selectedCategory) {
       result = result.filter((p) => p.category === selectedCategory);
     }
 
+    // Price filter
+    result = result.filter((p) => p.price >= priceRange.min && p.price <= priceRange.max);
+
+    // Rating filter
+    if (selectedRatings.length > 0) {
+      result = result.filter((p) => selectedRatings.some((r) => p.rating.rate >= r));
+    }
+
+    // Sorting
     switch (sortBy) {
       case "price-asc":
         result.sort((a, b) => a.price - b.price);
@@ -48,7 +84,17 @@ export default function ProductListing({ products, categories }: ProductListingP
     }
 
     return result;
-  }, [products, selectedCategory, sortBy]);
+  }, [
+    products,
+    selectedCategory,
+    sortBy,
+    priceRange,
+    selectedRatings,
+  ]);
+
+  const getCurrentSortLabel = () => {
+    return SORT_OPTIONS.find((opt) => opt.value === sortBy)?.label || "RECOMMENDED";
+  };
 
   return (
     <section className="product-listing-section">
@@ -68,7 +114,8 @@ export default function ProductListing({ products, categories }: ProductListingP
           </button>
         </div>
 
-        <div className="sort-container">
+        {/* Desktop sort */}
+        <div className="sort-container-desktop">
           <label htmlFor="sort-select" className="sr-only">Sort products</label>
           <select
             id="sort-select"
@@ -84,7 +131,44 @@ export default function ProductListing({ products, categories }: ProductListingP
             ))}
           </select>
         </div>
+
+        {/* Mobile sort dropdown */}
+        <div className="sort-container-mobile">
+          <button
+            className="filter-header-btn"
+            onClick={() => setShowFilter(!showFilter)}
+            aria-expanded={showFilter}
+            aria-label="Toggle filter options"
+          >
+            FILTER
+          </button>
+          <button
+            className="sort-dropdown-btn"
+            onClick={() => setSortDropdownOpen(!sortDropdownOpen)}
+            aria-expanded={sortDropdownOpen}
+            aria-label="Sort products"
+          >
+            {getCurrentSortLabel()}
+          </button>
+        </div>
       </div>
+
+      {sortDropdownOpen && (
+        <div className="sort-dropdown-menu-mobile">
+          {SORT_OPTIONS.map((opt) => (
+            <button
+              key={opt.value}
+              className={`sort-option ${sortBy === opt.value ? "active" : ""}`}
+              onClick={() => {
+                setSortBy(opt.value);
+                setSortDropdownOpen(false);
+              }}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="listing-body">
         {/* Filter sidebar */}
@@ -94,6 +178,26 @@ export default function ProductListing({ products, categories }: ProductListingP
               categories={categories}
               selectedCategory={selectedCategory}
               onCategoryChange={setSelectedCategory}
+              priceRange={priceRange}
+              onPriceRangeChange={setPriceRange}
+              selectedRatings={selectedRatings}
+              onRatingsChange={setSelectedRatings}
+              idealForFilter={idealForFilter}
+              onIdealForChange={setIdealForFilter}
+              occasionFilter={occasionFilter}
+              onOccasionChange={setOccasionFilter}
+              workFilter={workFilter}
+              onWorkChange={setWorkFilter}
+              fabricFilter={fabricFilter}
+              onFabricChange={setFabricFilter}
+              segmentFilter={segmentFilter}
+              onSegmentChange={setSegmentFilter}
+              suitableForFilter={suitableForFilter}
+              onSuitableForChange={setSuitableForFilter}
+              rawMaterialsFilter={rawMaterialsFilter}
+              onRawMaterialsChange={setRawMaterialsFilter}
+              patternFilter={patternFilter}
+              onPatternChange={setPatternFilter}
             />
           </div>
         )}
@@ -104,7 +208,13 @@ export default function ProductListing({ products, categories }: ProductListingP
             <p className="no-products">No products found.</p>
           ) : (
             filteredAndSortedProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                onAddToCart={onAddToCart}
+                onAddToWishlist={onAddToWishlist}
+                onRemoveFromWishlist={onRemoveFromWishlist}
+              />
             ))
           )}
         </div>

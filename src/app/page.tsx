@@ -1,6 +1,6 @@
 import { fetchProducts, fetchCategories } from "@/lib/api";
 import { Product } from "@/types/product";
-import ProductListing from "@/components/ProductListing";
+import ClientWrapper from "@/components/ClientWrapper";
 
 // Force dynamic SSR — data is always fetched at request time on the server
 export const dynamic = "force-dynamic";
@@ -163,19 +163,8 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
       />
 
-      {/* Hero section */}
-      <section className="hero-section" aria-label="Hero banner">
-        <div className="hero-content">
-          <h1 className="hero-title">DISCOVER OUR PRODUCTS</h1>
-          <p className="hero-subtitle">
-            Lorem ipsum dolor sit amet consectetur. Amet est placerat in erat
-            pellentesque nec lorem ipsum dolor sit amet consectetur.
-          </p>
-        </div>
-      </section>
-
-      {/* Product listing with filters and sorting */}
-      <ProductListing products={products} categories={categories} />
+      {/* Client wrapper for state management */}
+      <ClientWrapper products={products} categories={categories} />
     </>
   );
 }
