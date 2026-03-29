@@ -14,6 +14,7 @@ export async function fetchProducts(): Promise<Product[]> {
     if (res.ok) {
       const data = await res.json();
       // Normalize primary API data
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return data.map((p: any) => ({
         id: p.id,
         title: p.title,
@@ -35,6 +36,7 @@ export async function fetchProducts(): Promise<Product[]> {
       if (res.ok) {
         let data = await res.json();
         // Normalize data to FakeStore format
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         data = data.map((p: any) => {
           // Handle different API formats
           const image = p.images?.[0] || p.image || "";
