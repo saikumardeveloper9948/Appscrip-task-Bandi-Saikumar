@@ -21,7 +21,15 @@ export default function ProductCard({
 
   // Generate SVG placeholder as fallback
   const placeholderSvg = useMemo(() => {
-    const categoryText = product.category.substring(0, 20);
+    // Handle category as both string and object
+    let categoryText = "";
+    if (typeof product.category === "string") {
+      categoryText = product.category.substring(0, 20);
+    } else if (product.category && typeof product.category === "object" && "name" in product.category) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      categoryText = (product.category as any).name?.substring(0, 20) || "";
+    }
+    
     return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect fill='%23f0f0f0' width='300' height='300'/%3E%3Ccircle cx='150' cy='120' r='35' fill='%23d0d0d0'/%3E%3Cpath d='M 80 180 Q 150 160 220 180' fill='none' stroke='%23d0d0d0' stroke-width='2'/%3E%3Ctext x='150' y='260' text-anchor='middle' font-family='Arial' font-size='11' fill='%23999'%3E${categoryText}%3C/text%3E%3C/svg%3E`;
   }, [product.category]);
 

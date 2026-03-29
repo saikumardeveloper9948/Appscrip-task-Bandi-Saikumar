@@ -15,15 +15,25 @@ export async function fetchProducts(): Promise<Product[]> {
       const data = await res.json();
       // Normalize primary API data
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return data.map((p: any) => ({
-        id: p.id,
-        title: p.title,
-        price: p.price,
-        description: p.description,
-        category: p.category || "",
-        image: p.image || "",
-        rating: p.rating || { rate: 0, count: 0 }
-      }));
+      return data.map((p: any) => {
+        // Ensure category is always a string
+        let category = "";
+        if (typeof p.category === "string") {
+          category = p.category;
+        } else if (p.category && typeof p.category === "object" && "name" in p.category) {
+          category = p.category.name || "";
+        }
+        
+        return {
+          id: p.id,
+          title: p.title,
+          price: p.price,
+          description: p.description,
+          category: category,
+          image: p.image || "",
+          rating: p.rating || { rate: 0, count: 0 }
+        };
+      });
     }
   } catch (error) {
     console.error("Primary API failed:", error);
@@ -40,9 +50,15 @@ export async function fetchProducts(): Promise<Product[]> {
         data = data.map((p: any) => {
           // Handle different API formats
           const image = p.images?.[0] || p.image || "";
-          const category = typeof p.category === "string" 
-            ? p.category 
-            : (p.category?.name || p.category || "");
+          
+          // Convert category to string (handle both string and object)
+          let category = "";
+          if (typeof p.category === "string") {
+            category = p.category;
+          } else if (p.category && typeof p.category === "object" && "name" in p.category) {
+            category = p.category.name || "";
+          }
+          
           const rating = p.rating || { rate: 0, count: 0 };
           
           return {
