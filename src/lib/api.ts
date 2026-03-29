@@ -13,7 +13,16 @@ export async function fetchProducts(): Promise<Product[]> {
     const res = await fetch(`${PRIMARY_API}/products`);
     if (res.ok) {
       const data = await res.json();
-      return data;
+      // Normalize primary API data
+      return data.map((p: any) => ({
+        id: p.id,
+        title: p.title,
+        price: p.price,
+        description: p.description,
+        category: p.category || "",
+        image: p.image || "",
+        rating: p.rating || { rate: 0, count: 0 }
+      }));
     }
   } catch (error) {
     console.error("Primary API failed:", error);
@@ -25,13 +34,25 @@ export async function fetchProducts(): Promise<Product[]> {
       const res = await fetch(`${apiUrl}/products`);
       if (res.ok) {
         let data = await res.json();
-        // Convert ReactBD/Escuelajs format to FakeStore format if needed
-        if (data[0] && data[0].images && !data[0].image) {
-          data = data.map((p: any) => ({
-            ...p,
-            image: p.images?.[0] || p.image || ""
-          }));
-        }
+        // Normalize data to FakeStore format
+        data = data.map((p: any) => {
+          // Handle different API formats
+          const image = p.images?.[0] || p.image || "";
+          const category = typeof p.category === "string" 
+            ? p.category 
+            : (p.category?.name || p.category || "");
+          const rating = p.rating || { rate: 0, count: 0 };
+          
+          return {
+            id: p.id,
+            title: p.title,
+            price: p.price,
+            description: p.description,
+            category: category,
+            image: image,
+            rating: rating
+          };
+        });
         return data;
       }
     } catch (error) {
