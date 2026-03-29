@@ -1,8 +1,8 @@
 import { Product } from "@/types/product";
 
-// Using ReactBD Mirror of FakeStore API (more stable than fakestoreapi.com)
-// Alternative: https://api.escuelajs.co/api/v1 (Platzi API)
-const API_BASE_URL = "https://fakestoreapi.reactbd.com";
+// Using original FakeStore API (fakestoreapi.com)
+// Images are proxied through /api/image route to bypass CORS
+const API_BASE_URL = "https://fakestoreapi.com";
 
 export async function fetchProducts(): Promise<Product[]> {
   try {
