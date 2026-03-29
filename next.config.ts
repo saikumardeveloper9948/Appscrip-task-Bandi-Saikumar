@@ -9,6 +9,16 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return {
+      beforeFiles: [
+        {
+          source: "/api/image/:path*",
+          destination: "https://fakestoreapi.com/:path*",
+        },
+      ],
+    };
+  },
 };
 
 export default nextConfig;
