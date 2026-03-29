@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { Product } from "@/types/product";
 
 interface ProductCardProps {
@@ -60,16 +59,12 @@ export default function ProductCard({
   return (
     <article className="product-card" onClick={handleProductClick}>
       <div className="product-image-wrapper">
-        <Image
+        <img
           src={product.image}
           alt={`${product.title} - ${product.category} product image`}
-          width={300}
-          height={300}
           className="product-image"
           title={product.title}
           loading="lazy"
-          unoptimized
-          priority={false}
         />
 
         {/* Overlay Actions */}
